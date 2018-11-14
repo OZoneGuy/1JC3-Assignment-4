@@ -74,7 +74,6 @@ polyListDeriv (PolyList (x:xs)) = let
   derive (x:xs) n = x*n:derive xs (n+1)
   derive _ _ = []
   in PolyList (derive xs 1)
--- polyListDeriv (PolyList xs) = PolyList (tail (zipWith (*) xs [0..]))
 
 {- -----------------------------------------------------------------
  - polyListSum
@@ -111,10 +110,18 @@ polyListProd (PolyList xs) (PolyList ys) = let
 {- -----------------------------------------------------------------
  - polyListToPoly
  - -----------------------------------------------------------------
- - Description: TODO add comments on polyListToPoly here
+ - Description: Turns PolyList type into Poly
+ - uses auxilarry function, aux, to turn individual monomials into into Poly type
+ -
  -}
 polyListToPoly :: Num a => PolyList a -> Poly a
-polyListToPoly p1 = error "TODO: implement polyListToPoly"
+polyListToPoly (PolyList [x]) = Coef x
+polyListToPoly (PolyList xs)  = let
+  l = length xs - 1
+  aux :: Num a => a -> Int -> Poly a
+  aux x 0 = Coef x
+  aux x n = Prod X (aux x (n-1))
+  in Sum (aux (last xs) l) (polyListToPoly (PolyList (init xs)))
 
 {- -----------------------------------------------------------------
  - polyToPolyList
