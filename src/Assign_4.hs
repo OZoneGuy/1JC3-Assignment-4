@@ -4,6 +4,8 @@
  -}
 module Assign_4 where
 
+import Test.QuickCheck.Monadic
+
 macid :: String
 macid = "alkersho"
 
@@ -152,3 +154,37 @@ polyToPolyList (Prod a b) = polyListProd (polyToPolyList a) (polyToPolyList b)
  - -----------------------------------------------------------------
  - TODO: add test cases
  -}
+
+getList :: PolyList a -> [a]
+getList (PolyList xs) = xs
+
+
+getPolyListProp1 f = monadicIO $ do
+  text <- run $ readFile f
+  poly <- run $ getPolyList f
+  let
+    lineC = length (lines text)
+  assert $ lineC == length (getList poly)
+
+
+polyListDegreeProp1 :: [Double] -> Bool
+polyListDegreeProp1 xs = null xs || toInteger( length xs - 1) == polyListDegree (PolyList xs)
+
+polyListDerivProp1 :: [Double] -> Bool
+polyListDerivProp1 xs = null xs || (length xs - 1 == length (getList (polyListDeriv (PolyList xs))))
+
+polyListSumProp1 :: [Double] -> [Double] -> Double -> Bool
+polyListSumProp1 xs ys n = let
+ polySum = polyListSum (PolyList xs) (PolyList ys)
+ polySumV = polyListValue polySum n
+ poly1V = polyListValue (PolyList xs) n
+ poly2V = polyListValue (PolyList ys) n
+ in (null xs || null ys) || (polySumV == (poly1V + poly2V))
+
+polyListProdProp1 :: [Float] -> [Float] -> Float -> Bool
+polyListProdProp1 xs ys n = let
+ polyProd = polyListProd (PolyList xs) (PolyList ys)
+ polyProdV = polyListValue polyProd n
+ poly1V = polyListValue (PolyList xs) n
+ poly2V = polyListValue (PolyList ys) n
+ in (null xs || null ys) || (polyProdV == poly1V * poly2V)
