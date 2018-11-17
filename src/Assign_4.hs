@@ -16,6 +16,10 @@ data Poly a = X
 
 newtype PolyList a = PolyList [a] deriving Show
 
+simplify::(Num a, Eq a) =>  PolyList a -> PolyList a
+simplify (PolyList (x:xs)) | x == 0    = simplify (PolyList xs)
+                           | otherwise = PolyList (x:xs)
+
 {- -----------------------------------------------------------------
  - getPolyList
  - -----------------------------------------------------------------
@@ -27,7 +31,7 @@ getPolyList file = do
   fileText <- readFile file
   let
     values = map (\x -> read x::Integer) (lines fileText)
-  return $ PolyList values
+  return $ simplify $ PolyList values
 
 
 {- -----------------------------------------------------------------
@@ -40,7 +44,7 @@ getPolyList file = do
  - recursevly repeats until reaches base case, one element in PolyList
  - a0+x*(a1+x*(...(an+x))) = a0+a1*x+a2*x^2+...+an*x^n
  -}
-polyListValue :: Num a => PolyList a -> a -> a
+polyListValue :: (Num a, Eq a) => PolyList a -> a -> a
 polyListValue (PolyList [x]) _ = x
 polyListValue (PolyList (x:xs)) n = x + n * polyListValue (PolyList xs) n
 
@@ -68,12 +72,12 @@ polyListDegree (PolyList xs) | last xs == 0 = polyListDegree (PolyList (init xs)
  - respectively
  - Uses power rule
  -}
-polyListDeriv :: (Num a, Enum a)=> PolyList a -> PolyList a
+polyListDeriv :: (Num a, Eq a)=> PolyList a -> PolyList a
 polyListDeriv (PolyList (x:xs)) = let
   derive:: Num a => [a] -> a -> [a]
   derive (x:xs) n = x*n:derive xs (n+1)
   derive _ _ = []
-  in PolyList (derive xs 1)
+  in simplify $ PolyList $ derive xs 1
 
 {- -----------------------------------------------------------------
  - polyListSum
@@ -81,8 +85,8 @@ polyListDeriv (PolyList (x:xs)) = let
  - Description: Adds the corresponding monmials, first with first etc.
  - uses auxilarry function sumList
  -}
-polyListSum :: Num a => PolyList a -> PolyList a -> PolyList a
-polyListSum (PolyList xs) (PolyList ys) = PolyList (sumList xs ys)
+polyListSum :: (Num a, Eq a) => PolyList a -> PolyList a -> PolyList a
+polyListSum (PolyList xs) (PolyList ys) = simplify $ PolyList $ sumList xs ys
 
 -- made because zipWith get rid of excess elements, this keeps excess elements
 sumList:: Num a => [a] -> [a] -> [a]
@@ -99,13 +103,13 @@ sumList xs [] = xs
  - combines the head of xs1 with xs2
  - does ths recursevely untill all elements of xs are used
  -}
-polyListProd :: Num a => PolyList a -> PolyList a -> PolyList a
+polyListProd :: (Num a, Eq a) => PolyList a -> PolyList a -> PolyList a
 polyListProd (PolyList xs) (PolyList ys) = let
     func [x] ys1 = map(*x) ys1
     func (x:xs1) ys1 = let
       comp = map (*x) ys1
       in head comp : sumList (tail comp) (func xs1 ys1)
-  in PolyList (func xs ys)
+  in simplify $ PolyList $ func xs ys
 
 {- -----------------------------------------------------------------
  - polyListToPoly
@@ -129,7 +133,7 @@ polyListToPoly (PolyList xs)  = let
  - Description: Turns Poly type into PolyList
  - uses polyListSum and polyListProd to turn (sum a b) (Prod a b) into PolyList respectively
  -}
-polyToPolyList :: Num a => Poly a -> PolyList a
+polyToPolyList :: (Num a, Eq a) => Poly a -> PolyList a
 polyToPolyList (Coef x) = PolyList [x]
 polyToPolyList X = PolyList [0,1]
 polyToPolyList (Sum a b) = polyListSum (polyToPolyList  a) (polyToPolyList b)
