@@ -16,7 +16,7 @@ data Poly a = X
             | Prod (Poly a) (Poly a)
             deriving Show
 
-newtype PolyList a = PolyList [a] deriving Show
+newtype PolyList a = PolyList [a] deriving (Show, Eq)
 
 simplify::(Num a, Eq a) =>  PolyList a -> PolyList a
 simplify (PolyList (x:xs)) | x == 0    = simplify (PolyList xs)
@@ -179,7 +179,7 @@ polyListSumProp1 xs ys n = let
  polySumV = polyListValue polySum n
  poly1V = polyListValue (PolyList xs) n
  poly2V = polyListValue (PolyList ys) n
- in (null xs || null ys) || (polySumV == (poly1V + poly2V))
+ in (null xs || null ys) || (abs(polySumV - (poly1V + poly2V)) < 10E-10)
 
 polyListProdProp1 :: [Float] -> [Float] -> Float -> Bool
 polyListProdProp1 xs ys n = let
@@ -187,4 +187,9 @@ polyListProdProp1 xs ys n = let
  polyProdV = polyListValue polyProd n
  poly1V = polyListValue (PolyList xs) n
  poly2V = polyListValue (PolyList ys) n
- in (null xs || null ys) || (polyProdV == poly1V * poly2V)
+ in (null xs || null ys) || (polyProdV == (poly1V * poly2V))
+
+polyListTopPolyProp1 :: [Float] -> Bool
+polyListTopPolyProp1 xs = let
+  polyList = PolyList xs
+  in null xs || (polyList == polyToPolyList(polyListToPoly polyList))
