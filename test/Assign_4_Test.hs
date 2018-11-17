@@ -11,8 +11,17 @@ import Criterion.Main   -- see https://www.stackage.org/haddock/lts-8.24/criteri
 
 main :: IO ()
 main = do print "Performing Test 1: "
-          quickCheck prop1
-          -- TODO implement real tests
+          quickCheck polyListDerivProp1
+          print "Performing Test 2: "
+          quickCheck polyListSumProp1
+          print "Performing Test 3: "
+          quickCheck polyListProdProp1
+          print "Performing Test 4: "
+          quickCheck polyListDegreeProp1
+          print "Performing Test 5: Cannot test getPolyList"
+          -- quickCheck getPolyListProp1
+          print "Performing Test 6: "
+          quickCheck polyListTopPolyProp1
 
-prop1 :: Int -> Bool
-prop1 _ = True
+-- prop1 :: Int -> Bool
+-- prop1 _ = True
