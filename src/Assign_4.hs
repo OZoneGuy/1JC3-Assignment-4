@@ -146,9 +146,12 @@ polyToPolyList (Prod a b) = polyListProd (polyToPolyList a) (polyToPolyList b)
  - -----------------------------------------------------------------
  -
  - -----------------------------------------------------------------
- - - Function:
- - - Test Case Number:
- - - Input:
+ - - Function: getPolyList
+ - - Test Case Number: 1-A
+ - - Input: File ->
+ {50,
+10
+,0}
  - - Expected Output:
  - - Acutal Output:
  - -----------------------------------------------------------------
@@ -179,7 +182,7 @@ polyListSumProp1 xs ys n = let
  polySumV = polyListValue polySum n
  poly1V = polyListValue (PolyList xs) n
  poly2V = polyListValue (PolyList ys) n
- in (null xs || null ys) || (abs(polySumV - (poly1V + poly2V)) < 10E-10)
+ in (null xs || null ys) || abs(polySumV - (poly1V + poly2V)) < 10E-1
 
 polyListProdProp1 :: [Float] -> [Float] -> Float -> Bool
 polyListProdProp1 xs ys n = let
@@ -187,7 +190,7 @@ polyListProdProp1 xs ys n = let
  polyProdV = polyListValue polyProd n
  poly1V = polyListValue (PolyList xs) n
  poly2V = polyListValue (PolyList ys) n
- in (null xs || null ys) || (polyProdV == (poly1V * poly2V))
+ in (null xs || null ys) || abs(polyProdV - (poly1V * poly2V)) < 10E-2
 
 polyListTopPolyProp1 :: [Float] -> Bool
 polyListTopPolyProp1 xs = let
