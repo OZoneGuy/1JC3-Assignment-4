@@ -173,6 +173,12 @@ polyToPolyList (Prod a b) = polyListProd (polyToPolyList a) (polyToPolyList b)
  - - Expected Output: PolyList [25,-10, 50]
  - - Acutal Output: PolyList [25,-10, 50]
  - -----------------------------------------------------------------
+ - QuickCheck
+ - -----------------------------------------------------------------
+ - Function: getPolyList
+ - Property: None defined
+ - Actual Test Result: NA
+ - -----------------------------------------------------------------
  -}
 
 {- -----------------------------------------------------------------
@@ -195,6 +201,12 @@ polyToPolyList (Prod a b) = polyListProd (polyToPolyList a) (polyToPolyList b)
  - - Input: PolyList [-1,-2,-3] 5
  - - Expected Output: -86
  - - Acutal Output: -86
+ - -----------------------------------------------------------------
+ - QuickCheck
+ - -----------------------------------------------------------------
+ - Function: polyListValue
+ - Property: None defined
+ - Actual Test Result: NA
  - -----------------------------------------------------------------
  -}
 
@@ -219,6 +231,12 @@ polyToPolyList (Prod a b) = polyListProd (polyToPolyList a) (polyToPolyList b)
  - - Expected Output: 4
  - - Acutal Output: 4
  - -----------------------------------------------------------------
+ - QuickCheck
+ - -----------------------------------------------------------------
+ - Function: polyListDegree
+ - Property: null xs || toInteger( length xs - 1) == polyListDegree (PolyList xs)
+ - Actual Test Result: PASS
+ - -----------------------------------------------------------------
  -}
 
 {- -----------------------------------------------------------------
@@ -236,11 +254,17 @@ polyToPolyList (Prod a b) = polyListProd (polyToPolyList a) (polyToPolyList b)
  - - Expected Output: PolyList [2,6]
  - - Acutal Output: PolyList [2,6]
  - -----------------------------------------------------------------
- - - Function: getPolyList
+ - - Function: polyListDeriv
  - - Test Case Number: 4-C
  - - Input: polyListDeriv [1,2,3,0]
  - - Expected Output: PolyList [2,6]
  - - Acutal Output: PolyList [2,6]
+ - -----------------------------------------------------------------
+ - QuickCheck
+ - -----------------------------------------------------------------
+ - Function: polyListDeriv
+ - Property: null xs || (length xs - 1 == length (getList (polyListDeriv (PolyList xs))))
+ - Actual Test Result: PASS
  - -----------------------------------------------------------------
  -}
 
@@ -265,6 +289,17 @@ polyToPolyList (Prod a b) = polyListProd (polyToPolyList a) (polyToPolyList b)
  - - Expected Output: PolyList [2,4]
  - - Acutal Output: PolyList [2,4]
  - -----------------------------------------------------------------
+ - QuickCheck
+ - -----------------------------------------------------------------
+ - Function: polyListSumProp1
+ - Property: let
+  polySum = polyListSum (PolyList xs) (PolyList ys)
+  polySumV = polyListValue polySum n
+  poly1V = polyListValue (PolyList xs) n
+  poly2V = polyListValue (PolyList ys) n
+  in (null xs || null ys) || abs(polySumV - (poly1V + poly2V)) < 10E-1
+ - Actual Test Result: FAIL
+ - -----------------------------------------------------------------
  -}
 
 {- -----------------------------------------------------------------
@@ -287,6 +322,17 @@ polyToPolyList (Prod a b) = polyListProd (polyToPolyList a) (polyToPolyList b)
  - - Input: (PolyList [-1,2,-3]) (PolyList [1,2,3])
  - - Expected Output: PolyList [-1,0,-2,0,-9]
  - - Acutal Output: PolyList [-1,0,-2,0,-9]
+ - -----------------------------------------------------------------
+ - QuickCheck
+ - -----------------------------------------------------------------
+ - Function: polyListDegree
+ - Property: let
+  polyProd = polyListProd (PolyList xs) (PolyList ys)
+  polyProdV = polyListValue polyProd n
+  poly1V = polyListValue (PolyList xs) n
+  poly2V = polyListValue (PolyList ys) n
+  in (null xs || null ys) || abs(polyProdV - (poly1V * poly2V)) < 10E-2
+ - Actual Test Result: FAIL
  - -----------------------------------------------------------------
  -}
 
@@ -311,6 +357,14 @@ polyToPolyList (Prod a b) = polyListProd (polyToPolyList a) (polyToPolyList b)
  - - Expected Output: Sum (Prod X (Prod X (Coef -3))) (Sum (Prod X (Coef 2)) (Coef -1))
  - - Acutal Output: Sum (Prod X (Prod X (Coef -3))) (Sum (Prod X (Coef 2)) (Coef -1))
  - -----------------------------------------------------------------
+ - QuickCheck
+ - -----------------------------------------------------------------
+ - Function: polyListDegree
+ - Property: let
+   polyList = PolyList xs
+   in null xs || (polyList == polyToPolyList(polyListToPoly polyList))
+ - Actual Test Result: PASS
+ - -----------------------------------------------------------------
  -}
 
 {- -----------------------------------------------------------------
@@ -333,6 +387,14 @@ polyToPolyList (Prod a b) = polyListProd (polyToPolyList a) (polyToPolyList b)
  - - Input: Sum (Prod X (Prod X (Coef 3))) (Sum (Prod X (Coef (-2))) (Coef 1))
  - - Expected Output: PolyList [1,-2,3]
  - - Acutal Output: PolyList [1,-2,3]
+ - -----------------------------------------------------------------
+ - QuickCheck
+ - -----------------------------------------------------------------
+ - Function: polyListDegree
+ - Property: let
+   polyList = PolyList xs
+   in null xs || (polyList == polyToPolyList(polyListToPoly polyList))
+ - Actual Test Result: PASS
  - -----------------------------------------------------------------
  -}
 
