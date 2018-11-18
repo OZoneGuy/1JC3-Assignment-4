@@ -22,6 +22,3 @@ main = do print "Performing Test 1: "
           -- quickCheck getPolyListProp1
           print "Performing Test 6: "
           quickCheck polyListTopPolyProp1
-
--- prop1 :: Int -> Bool
--- prop1 _ = True

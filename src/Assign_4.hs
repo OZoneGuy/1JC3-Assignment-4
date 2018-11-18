@@ -1,6 +1,6 @@
 {- Assignment 4
  - Name: Omar Alkersh
- - Date: TODO add of completion
+ - Date: 18/11/18
  -}
 module Assign_4 where
 
@@ -19,8 +19,8 @@ data Poly a = X
 newtype PolyList a = PolyList [a] deriving (Show, Eq)
 
 simplify::(Num a, Eq a) =>  PolyList a -> PolyList a
-simplify (PolyList (x:xs)) | x == 0    = simplify (PolyList xs)
-                           | otherwise = PolyList (x:xs)
+simplify (PolyList xs) | last xs == 0 = simplify (PolyList (init xs))
+                       | otherwise = PolyList xs
 
 {- -----------------------------------------------------------------
  - getPolyList
@@ -111,7 +111,7 @@ polyListProd (PolyList xs) (PolyList ys) = let
     func (x:xs1) ys1 = let
       comp = map (*x) ys1
       in head comp : sumList (tail comp) (func xs1 ys1)
-  in simplify $ PolyList $ func xs ys
+  in PolyList $ func xs ys
 
 {- -----------------------------------------------------------------
  - polyListToPoly
@@ -149,13 +149,191 @@ polyToPolyList (Prod a b) = polyListProd (polyToPolyList a) (polyToPolyList b)
  - - Function: getPolyList
  - - Test Case Number: 1-A
  - - Input: File ->
- {50,
-10
-,0}
- - - Expected Output:
- - - Acutal Output:
+ {50
+ 10
+ 0}
+ - - Expected Output: PolyList [50,10]
+ - - Acutal Output: PolyList [50,10]
  - -----------------------------------------------------------------
- - TODO: add test cases
+ - - - Function: getPolyList
+ - - Test Case Number: 1-B
+ - - Input: File ->
+ {0
+  10
+  -50}
+ - - Expected Output: PolyList [0,10, -50]
+ - - Acutal Output: PolyList [0,10,-50]
+ - -----------------------------------------------------------------
+ - - Function: getPolyList
+ - - Test Case Number: 1-C
+ - - Input: File ->
+ {25
+ -10
+ 50}
+ - - Expected Output: PolyList [25,-10, 50]
+ - - Acutal Output: PolyList [25,-10, 50]
+ - -----------------------------------------------------------------
+ -}
+
+{- -----------------------------------------------------------------
+ - Test Cases
+ - -----------------------------------------------------------------
+ - - Function: polyListValue
+ - - Test Case Number: 2-A
+ - - Input: PolyList [1,2,3] 5
+ - - Expected Output: 86
+ - - Acutal Output: 86
+ - -----------------------------------------------------------------
+ - - Function: polyListValue
+ - - Test Case Number: 2-B
+ - - Input: PolyList [-1,-2,0] 5
+ - - Expected Output: -11
+ - - Acutal Output: -11
+ - -----------------------------------------------------------------
+ - - Function: polyListValue
+ - - Test Case Number: 2-C
+ - - Input: PolyList [-1,-2,-3] 5
+ - - Expected Output: -86
+ - - Acutal Output: -86
+ - -----------------------------------------------------------------
+ -}
+
+{- -----------------------------------------------------------------
+ - Test Cases
+ - -----------------------------------------------------------------
+ - - Function: polyListDegree
+ - - Test Case Number: 3-A
+ - - Input: PolyList [1,2,3,0]
+ - - Expected Output: 2
+ - - Acutal Output: 2
+ - -----------------------------------------------------------------
+ - - Function: polyListDegree
+ - - Test Case Number: 3-B
+ - - Input: PolyList [1,2,0,3]
+ - - Expected Output: 3
+ - - Acutal Output: 3
+ - -----------------------------------------------------------------
+ - - Function: polyListDegree
+ - - Test Case Number: 3-C
+ - - Input: PolyList [1,5,3,7,-5]
+ - - Expected Output: 4
+ - - Acutal Output: 4
+ - -----------------------------------------------------------------
+ -}
+
+{- -----------------------------------------------------------------
+ - Test Cases
+ - -----------------------------------------------------------------
+ - - Function: polyListDeriv
+ - - Test Case Number: 4-A
+ - - Input: PolyList [1,2,3]
+ - - Expected Output: PolyList [2,6]
+ - - Acutal Output: PolyList [2,6]
+ - -----------------------------------------------------------------
+ - - Function: polyListDeriv
+ - - Test Case Number: 4-B
+ - - Input: PolyList [1,2,3,0]
+ - - Expected Output: PolyList [2,6]
+ - - Acutal Output: PolyList [2,6]
+ - -----------------------------------------------------------------
+ - - Function: getPolyList
+ - - Test Case Number: 4-C
+ - - Input: polyListDeriv [1,2,3,0]
+ - - Expected Output: PolyList [2,6]
+ - - Acutal Output: PolyList [2,6]
+ - -----------------------------------------------------------------
+ -}
+
+{- -----------------------------------------------------------------
+ - Test Cases
+ - -----------------------------------------------------------------
+ - - Function: polyListSum
+ - - Test Case Number: 5-A
+ - - Input: (PolyList [1,2,3]) (PolyList [1,2,3])
+ - - Expected Output: PolyList [2,4,6]
+ - - Acutal Output: PolyList [2,4,6]
+ - -----------------------------------------------------------------
+ - - Function: polyListSum
+ - - Test Case Number: 5-B
+ - - Input: (PolyList [1,2,3]) (PolyList [1,2,3,4])
+ - - Expected Output: PolyList [2,4,6,4]
+ - - Acutal Output: PolyList [2,4,6,4]
+ - -----------------------------------------------------------------
+ - - Function: polyListSum
+ - - Test Case Number: 5-C
+ - - Input: (PolyList [1,2,3]) (PolyList [1,2,-3])
+ - - Expected Output: PolyList [2,4]
+ - - Acutal Output: PolyList [2,4]
+ - -----------------------------------------------------------------
+ -}
+
+{- -----------------------------------------------------------------
+ - Test Cases
+ - -----------------------------------------------------------------
+ - - Function: polyListProd
+ - - Test Case Number: 6-A
+ - - Input: (PolyList [1,2,3]) (PolyList [1,2,3])
+ - - Expected Output: PolyList [1,4,10,12,9]
+ - - Acutal Output: PolyList [1,4,10,12,9]
+ - -----------------------------------------------------------------
+ - - Function: polyListProd
+ - - Test Case Number: 6-B
+ - - Input: (PolyList [1,0,3]) (PolyList [1,2,3])
+ - - Expected Output: PolyList [1,4,6,6,9]
+ - - Acutal Output: PolyList [1,4,6,6,9]
+ - -----------------------------------------------------------------
+ - - Function: polyListProd
+ - - Test Case Number: 6-C
+ - - Input: (PolyList [-1,2,-3]) (PolyList [1,2,3])
+ - - Expected Output: PolyList [-1,0,-2,0,-9]
+ - - Acutal Output: PolyList [-1,0,-2,0,-9]
+ - -----------------------------------------------------------------
+ -}
+
+{- -----------------------------------------------------------------
+ - Test Cases
+ - -----------------------------------------------------------------
+ - - Function: polyListToPoly
+ - - Test Case Number: 7-A
+ - - Input: polyList [1,2,3]
+ - - Expected Output: Sum (Prod X (Prod X (Coef 3))) (Sum (Prod X (Coef 2)) (Coef 1))
+ - - Acutal Output: Sum (Prod X (Prod X (Coef 3))) (Sum (Prod X (Coef 2)) (Coef 1))
+ - -----------------------------------------------------------------
+ - - Function: polyListToPoly
+ - - Test Case Number: 7-B
+ - - Input: PolyList [1,0,3]
+ - - Expected Output: Sum (Prod X (Prod X (Coef 3))) (Sum (Prod X (Coef 0)) (Coef 1))
+ - - Acutal Output: Sum (Prod X (Prod X (Coef 3))) (Sum (Prod X (Coef 0)) (Coef 1))
+ - -----------------------------------------------------------------
+ - - Function: polyListToPoly
+ - - Test Case Number: 7-C
+ - - Input: PolyList [-1,2,-3]
+ - - Expected Output: Sum (Prod X (Prod X (Coef -3))) (Sum (Prod X (Coef 2)) (Coef -1))
+ - - Acutal Output: Sum (Prod X (Prod X (Coef -3))) (Sum (Prod X (Coef 2)) (Coef -1))
+ - -----------------------------------------------------------------
+ -}
+
+{- -----------------------------------------------------------------
+ - Test Cases
+ - -----------------------------------------------------------------
+ - - Function: polyToPolyList
+ - - Test Case Number: 8-A
+ - - Input: Sum (Prod X (Prod X (Coef 3))) (Sum (Prod X (Coef 2)) (Coef 1))
+ - - Expected Output: PolyList [1,2,3]
+ - - Acutal Output: PolyList [1,2,3]
+ - -----------------------------------------------------------------
+ - - Function: polyListToPoly
+ - - Test Case Number: 8-B
+ - - Input: Sum (Prod X (Prod X (Coef 3))) (Sum (Prod X (Coef 0)) (Coef 1))
+ - - Expected Output: PolyList [1,0,3]
+ - - Acutal Output: PolyList [1,0,3]
+ - -----------------------------------------------------------------
+ - - Function: polyListToPoly
+ - - Test Case Number: 8-C
+ - - Input: Sum (Prod X (Prod X (Coef 3))) (Sum (Prod X (Coef (-2))) (Coef 1))
+ - - Expected Output: PolyList [1,-2,3]
+ - - Acutal Output: PolyList [1,-2,3]
+ - -----------------------------------------------------------------
  -}
 
 getList :: PolyList a -> [a]
@@ -192,7 +370,7 @@ polyListProdProp1 xs ys n = let
  poly2V = polyListValue (PolyList ys) n
  in (null xs || null ys) || abs(polyProdV - (poly1V * poly2V)) < 10E-2
 
-polyListTopPolyProp1 :: [Float] -> Bool
-polyListTopPolyProp1 xs = let
+polyListToPolyProp1 :: [Float] -> Bool
+polyListToPolyProp1 xs = let
   polyList = PolyList xs
   in null xs || (polyList == polyToPolyList(polyListToPoly polyList))
