@@ -21,4 +21,4 @@ main = do print "Performing Test 1: "
           print "Performing Test 5: Cannot test getPolyList"
           -- quickCheck getPolyListProp1
           print "Performing Test 6: "
-          quickCheck polyListTopPolyProp1
+          quickCheck polyListToPolyProp1
